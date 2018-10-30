@@ -312,8 +312,8 @@ $(document).ready(function () {
 
 <p>Thanks to <a href="https://github.com/justmarkham/dplyr-tutorial/blob/master/dplyr-tutorial.Rmd">dplyr tutorial</a> by <a href="https://github.com/justmarkham">Kevin Markham</a></p>
 <p>Note: There is a 40-minute <a href="https://www.youtube.com/watch?v=jWjqLW-u3hc">video tutorial</a> on YouTube that walks through this document in detail.</p>
-<div id="why-do-i-use-dplyr" class="section level2">
-<h2>Why do I use dplyr?</h2>
+<div id="why-using-dplyr" class="section level2">
+<h2>Why using dplyr?</h2>
 <ul>
 <li>Great for data exploration and transformation</li>
 <li>Intuitive to write and easy to read, especially when using the “chaining” syntax (covered below)</li>
@@ -434,7 +434,7 @@ filter(flights, UniqueCarrier==&quot;AA&quot; | UniqueCarrier==&quot;UA&quot;)</
 <pre class="r"><code># base R approach to select DepTime, ArrTime, and FlightNum columns
 flights[, c(&quot;DepTime&quot;, &quot;ArrTime&quot;, &quot;FlightNum&quot;)]</code></pre>
 <pre class="r"><code># dplyr approach
-select(flights, DepTime, ArrTime, FlightNum)</code></pre>
+select(flights, c(DepTime, ArrTime, FlightNum))</code></pre>
 <pre><code>## # A tibble: 227,496 x 3
 ##    DepTime ArrTime FlightNum
 ##  *   &lt;int&gt;   &lt;int&gt;     &lt;int&gt;
@@ -451,7 +451,7 @@ select(flights, DepTime, ArrTime, FlightNum)</code></pre>
 ## # ... with 227,486 more rows</code></pre>
 <pre class="r"><code># use colon to select multiple contiguous columns, and use `contains` to match columns by name
 # note: `starts_with`, `ends_with`, and `matches` (for regular expressions) can also be used to match columns by name
-select(flights, Year:DayofMonth, contains(&quot;Taxi&quot;), contains(&quot;Delay&quot;))</code></pre>
+select(flights, c(Year:DayofMonth, contains(&quot;Taxi&quot;), contains(&quot;Delay&quot;)))</code></pre>
 <pre><code>## # A tibble: 227,496 x 7
 ##     Year Month DayofMonth TaxiIn TaxiOut ArrDelay DepDelay
 ##  * &lt;int&gt; &lt;int&gt;      &lt;int&gt;  &lt;int&gt;   &lt;int&gt;    &lt;int&gt;    &lt;int&gt;
@@ -474,10 +474,10 @@ select(flights, Year:DayofMonth, contains(&quot;Taxi&quot;), contains(&quot;Dela
 <li>Can write commands in a natural order by using the <code>%&gt;%</code> infix operator (which can be pronounced as “then”)</li>
 </ul>
 <pre class="r"><code># nesting method to select UniqueCarrier and DepDelay columns and filter for delays over 60 minutes
-filter(select(flights, UniqueCarrier, DepDelay), DepDelay &gt; 60)</code></pre>
+filter(select(flights, c(UniqueCarrier, DepDelay)), DepDelay &gt; 60)</code></pre>
 <pre class="r"><code># chaining method
 flights %&gt;%
-    select(UniqueCarrier, DepDelay) %&gt;%
+    select(c(UniqueCarrier, DepDelay)) %&gt;%
     filter(DepDelay &gt; 60)</code></pre>
 <pre><code>## # A tibble: 10,242 x 2
 ##    UniqueCarrier DepDelay
@@ -814,11 +814,11 @@ flights %&gt;% sample_n(5)</code></pre>
 <pre><code>## # A tibble: 5 x 22
 ##    Year Month DayofMonth DayOfWeek DepTime ArrTime UniqueCarrier FlightNum
 ##   &lt;int&gt; &lt;int&gt;      &lt;int&gt;     &lt;int&gt;   &lt;int&gt;   &lt;int&gt; &lt;chr&gt;             &lt;int&gt;
-## 1  2011     2         23         3    1916    2227 CO                 1492
-## 2  2011     6          4         6    1255    1600 OO                 1187
-## 3  2011    12         29         4     903    1053 CO                 1239
-## 4  2011     3          2         3     852    1018 XE                 2967
-## 5  2011    12         29         4     957    1059 WN                  406
+## 1  2011    11         23         3     954    1120 XE                 6105
+## 2  2011     1         15         6    1023    1217 XE                 3002
+## 3  2011     3         25         5    1133    1328 CO                 1882
+## 4  2011     1         23         7    1247    1555 CO                 1757
+## 5  2011    10         13         4    1715    1800 WN                 2189
 ## # ... with 14 more variables: TailNum &lt;chr&gt;, ActualElapsedTime &lt;int&gt;,
 ## #   AirTime &lt;int&gt;, ArrDelay &lt;int&gt;, DepDelay &lt;int&gt;, Origin &lt;chr&gt;,
 ## #   Dest &lt;chr&gt;, Distance &lt;int&gt;, TaxiIn &lt;int&gt;, TaxiOut &lt;int&gt;,
@@ -828,16 +828,16 @@ flights %&gt;% sample_frac(0.25, replace=TRUE)</code></pre>
 <pre><code>## # A tibble: 56,874 x 22
 ##     Year Month DayofMonth DayOfWeek DepTime ArrTime UniqueCarrier FlightNum
 ##    &lt;int&gt; &lt;int&gt;      &lt;int&gt;     &lt;int&gt;   &lt;int&gt;   &lt;int&gt; &lt;chr&gt;             &lt;int&gt;
-##  1  2011     1         13         4    1404    1447 WN                  195
-##  2  2011    12         12         1     909    1010 CO                 1628
-##  3  2011     6         27         1    1246    1339 CO                  279
-##  4  2011     4          4         1    2205       8 CO                 1644
-##  5  2011     8         10         3    1446    1548 MQ                 3390
-##  6  2011     3         26         6    1311    1734 CO                  810
-##  7  2011    11         26         6     825     933 WN                   34
-##  8  2011     9         15         4     601     724 EV                 5234
-##  9  2011     4         19         2    2106    2159 CO                 1479
-## 10  2011     4          5         2    1847    1943 CO                 1779
+##  1  2011     2         13         7    1052    1415 XE                 2986
+##  2  2011     3         26         6    1013    1200 XE                 3002
+##  3  2011     9         12         1    1658    2058 CO                 1277
+##  4  2011     6          3         5    2005    2320 XE                 2288
+##  5  2011     3         31         4    1920    2249 CO                 1662
+##  6  2011    12         26         1    1558    1832 OO                 5190
+##  7  2011     6          9         4     738    1141 CO                  626
+##  8  2011    11         12         6    1926    2242 CO                 1523
+##  9  2011     3         10         4    1030    1420 OO                 5840
+## 10  2011     3         14         1    1429    1526 WN                   32
 ## # ... with 56,864 more rows, and 14 more variables: TailNum &lt;chr&gt;,
 ## #   ActualElapsedTime &lt;int&gt;, AirTime &lt;int&gt;, ArrDelay &lt;int&gt;,
 ## #   DepDelay &lt;int&gt;, Origin &lt;chr&gt;, Dest &lt;chr&gt;, Distance &lt;int&gt;,

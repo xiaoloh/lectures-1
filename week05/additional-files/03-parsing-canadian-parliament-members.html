@@ -11,7 +11,7 @@
 
 <meta name="author" content="Akitaka Matsuo" />
 
-<meta name="date" content="2018-10-29" />
+<meta name="date" content="2018-10-30" />
 
 <title>Parsing Canadian Paliament List</title>
 
@@ -309,7 +309,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Parsing Canadian Paliament List</h1>
 <h4 class="author"><em>Akitaka Matsuo</em></h4>
-<h4 class="date"><em>10/29/2018</em></h4>
+<h4 class="date"><em>10/30/2018</em></h4>
 
 </div>
 
@@ -318,7 +318,16 @@ $(document).ready(function () {
 <div id="load-libraries" class="section level2">
 <h2>Load libraries</h2>
 <pre class="r"><code>library(xml2)
-library(rvest)</code></pre>
+library(rvest)
+library(dplyr)</code></pre>
+<pre><code>## 
+## Attaching package: 'dplyr'</code></pre>
+<pre><code>## The following objects are masked from 'package:stats':
+## 
+##     filter, lag</code></pre>
+<pre><code>## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union</code></pre>
 </div>
 <div id="get-the-file" class="section level2">
 <h2>Get the file</h2>
@@ -401,9 +410,75 @@ length(mps_nodes)</code></pre>
 ## 1                    Ziad              Aboultaif Edmonton Manning
 ##   ConstituencyProvinceTerritoryName CaucusShortName        FromDateTime
 ## 1                           Alberta    Conservative 2015-10-19T00:00:00</code></pre>
-<p>node_processing &lt;- function(x) data.frame(as.list(unlist(as_list(x))), stringsAsFactors = FALSE)</p>
-<p>data_all &lt;- do.call(bind_rows, lapply(nodes, node_processing))</p>
-<p>```</p>
+<p>In the code chunk above, we are finally able to make a list of mps</p>
+<pre class="r"><code>## first define a function to process each member
+node_processing &lt;- function(x) data.frame(as.list(unlist(as_list(x))), stringsAsFactors = FALSE)
+
+data_list &lt;- list()
+for(i in 1:length(mps_nodes)){
+  nod &lt;- mps_nodes[[i]]
+  data_list[[i]] &lt;- node_processing(nod)
+}
+
+data_all &lt;- bind_rows(data_list) # rbind() does not work because some elements are missing for some members. 
+head(data_all)</code></pre>
+<pre><code>##   PersonOfficialFirstName PersonOfficialLastName
+## 1                    Ziad              Aboultaif
+## 2                     Dan                  Albas
+## 3                  Harold               Albrecht
+## 4                    John                  Aldag
+## 5                    Omar               Alghabra
+## 6                   Leona               Alleslev
+##                      ConstituencyName ConstituencyProvinceTerritoryName
+## 1                    Edmonton Manning                           Alberta
+## 2 Central Okanagan—Similkameen—Nicola                  British Columbia
+## 3                 Kitchener—Conestoga                           Ontario
+## 4             Cloverdale—Langley City                  British Columbia
+## 5                  Mississauga Centre                           Ontario
+## 6     Aurora—Oak Ridges—Richmond Hill                           Ontario
+##   CaucusShortName        FromDateTime PersonShortHonorific
+## 1    Conservative 2015-10-19T00:00:00                 &lt;NA&gt;
+## 2    Conservative 2015-10-19T00:00:00                 &lt;NA&gt;
+## 3    Conservative 2015-10-19T00:00:00                 &lt;NA&gt;
+## 4         Liberal 2015-10-19T00:00:00                 &lt;NA&gt;
+## 5         Liberal 2015-10-19T00:00:00                 &lt;NA&gt;
+## 6    Conservative 2015-10-19T00:00:00                 &lt;NA&gt;</code></pre>
+<p>We could do this with <code>dplyr</code> based method. That would be much more intuitive.</p>
+<pre class="r"><code>node_processing_2 &lt;- function(x) {
+  # the following is exactly the same as 
+  # data.frame(as.list(unlist(as_list(x))), stringsAsFactors = FALSE)
+  # but this is probably easier to read
+  as_list(x) %&gt;% 
+    unlist %&gt;% 
+    as.list %&gt;% 
+    data.frame(stringsAsFactors = FALSE)
+}
+
+## use lapply() instead of for loop
+data_all_2 &lt;- lapply(mps_nodes, node_processing_2) %&gt;% # first run lapply to the list of nodes
+  bind_rows() # then use bind_rows() 
+head(data_all_2)</code></pre>
+<pre><code>##   PersonOfficialFirstName PersonOfficialLastName
+## 1                    Ziad              Aboultaif
+## 2                     Dan                  Albas
+## 3                  Harold               Albrecht
+## 4                    John                  Aldag
+## 5                    Omar               Alghabra
+## 6                   Leona               Alleslev
+##                      ConstituencyName ConstituencyProvinceTerritoryName
+## 1                    Edmonton Manning                           Alberta
+## 2 Central Okanagan—Similkameen—Nicola                  British Columbia
+## 3                 Kitchener—Conestoga                           Ontario
+## 4             Cloverdale—Langley City                  British Columbia
+## 5                  Mississauga Centre                           Ontario
+## 6     Aurora—Oak Ridges—Richmond Hill                           Ontario
+##   CaucusShortName        FromDateTime PersonShortHonorific
+## 1    Conservative 2015-10-19T00:00:00                 &lt;NA&gt;
+## 2    Conservative 2015-10-19T00:00:00                 &lt;NA&gt;
+## 3    Conservative 2015-10-19T00:00:00                 &lt;NA&gt;
+## 4         Liberal 2015-10-19T00:00:00                 &lt;NA&gt;
+## 5         Liberal 2015-10-19T00:00:00                 &lt;NA&gt;
+## 6    Conservative 2015-10-19T00:00:00                 &lt;NA&gt;</code></pre>
 </div>
 
 

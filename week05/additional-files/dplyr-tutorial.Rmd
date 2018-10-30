@@ -79,11 +79,11 @@ flights[, c("DepTime", "ArrTime", "FlightNum")]
 
 ```{r}
 # dplyr approach
-select(flights, DepTime, ArrTime, FlightNum)
+select(flights, c(DepTime, ArrTime, FlightNum))
 
 # use colon to select multiple contiguous columns, and use `contains` to match columns by name
 # note: `starts_with`, `ends_with`, and `matches` (for regular expressions) can also be used to match columns by name
-select(flights, Year:DayofMonth, contains("Taxi"), contains("Delay"))
+select(flights, c(Year:DayofMonth, contains("Taxi"), contains("Delay")))
 ```
 
 
@@ -94,13 +94,13 @@ select(flights, Year:DayofMonth, contains("Taxi"), contains("Delay"))
 
 ```{r results='hide'}
 # nesting method to select UniqueCarrier and DepDelay columns and filter for delays over 60 minutes
-filter(select(flights, UniqueCarrier, DepDelay), DepDelay > 60)
+filter(select(flights, c(UniqueCarrier, DepDelay)), DepDelay > 60)
 ```
 
 ```{r}
 # chaining method
 flights %>%
-    select(UniqueCarrier, DepDelay) %>%
+    select(c(UniqueCarrier, DepDelay)) %>%
     filter(DepDelay > 60)
 ```
 

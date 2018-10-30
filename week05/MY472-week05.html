@@ -3153,7 +3153,7 @@ width: 50%;
 </article></slide><slide class=""><hgroup><h2>Other data formats: XML</h2></hgroup><article  id="other-data-formats-xml">
 
 <ul>
-<li>XML = eXtensible Markup Language</li>
+<li><strong>XML</strong> = e<strong>X</strong>tensible <strong>M</strong>arkup <strong>L</strong>anguage</li>
 <li>XML is used for distributing data over the Internet.
 
 <ul>
@@ -3247,7 +3247,7 @@ width: 50%;
 <ul>
 <li>Using selectorGadget and &ldquo;Inspect&rdquo;</li>
 </ul></li>
-<li>XPath can be used another type of selector</li>
+<li>XPath can be used as another type of selector</li>
 <li>Similar functionality</li>
 <li>Probably a bit more coding involved, but more powerful</li>
 <li>More useful for parsing xml than html
@@ -3444,9 +3444,19 @@ width: 50%;
 <tr class="even">
 <td align="left">Tag strucure (p which is a second child of main div)</td>
 <td align="left">&ldquo;div#main &gt; p:nth-of-type(2)&rdquo;</td>
-<td align="left">//div[<span class="cite">@id</span>=&ldquo;main&rdquo;/p[2]</td>
+<td align="left">&ldquo;//div<span class="cite">[@id=&#39;main&#39;]</span>/p[2]&rdquo;</td>
+</tr>
+<tr class="odd">
+<td align="left">??</td>
+<td align="left">div.result-disp p</td>
+<td align="left">??</td>
 </tr>
 </table>
+
+<ul>
+<li>Guide: <a href='https://ghostinspector.com/docs/css-xpath-conversion/' title=''>https://ghostinspector.com/docs/css-xpath-conversion/</a></li>
+<li>Converter: <a href='https://css-selector-to-xpath.appspot.com/' title=''>https://css-selector-to-xpath.appspot.com/</a></li>
+</ul>
 
 </article></slide><slide class=""><hgroup><h2>Steps in XML (and html) parsing in R</h2></hgroup><article  id="steps-in-xml-and-html-parsing-in-r">
 
@@ -3474,7 +3484,21 @@ width: 50%;
 </ul></li>
 </ul>
 
-</article></slide><slide class=""><hgroup><h2>JSON, Primer</h2></hgroup><article  id="json-primer">
+</article></slide><slide class=""><hgroup><h2>A simple JSON</h2></hgroup><article  id="a-simple-json">
+
+<p><strong>Example 1: Two Name-Key values</strong></p>
+
+<pre class = 'prettyprint lang-json'>{&quot;firstName&quot;:&quot;John&quot;, &quot;lastName&quot;:&quot;Doe&quot;}</pre>
+
+<p><strong>Example 1:</strong></p>
+
+<pre class = 'prettyprint lang-json'>{&quot;employees&quot;:[
+    { &quot;firstName&quot;:&quot;John&quot;, &quot;lastName&quot;:&quot;Doe&quot; },
+    { &quot;firstName&quot;:&quot;Anna&quot;, &quot;lastName&quot;:&quot;Smith&quot; },
+    { &quot;firstName&quot;:&quot;Peter&quot;, &quot;lastName&quot;:&quot;Jones&quot; }
+]}</pre>
+
+</article></slide><slide class=""><hgroup><h2>JSON API Primer</h2></hgroup><article  id="json-api-primer">
 
 <p>For example: <a href='https://petition.parliament.uk/petitions/200205.json' title=''>https://petition.parliament.uk/petitions/200205.json</a></p>
 
@@ -3506,7 +3530,7 @@ print(petition$data$attributes$signatures_by_constituency %&gt;%
 
 <ul>
 <li>This is about scenario 3</li>
-<li>Many webpages cannot be scraped for many reasons:
+<li>Many webpages cannot be scraped for various reasons:
 
 <ul>
 <li>Form</li>
@@ -3572,6 +3596,8 @@ search_field$sendKeysToElement(list(&quot;london school of economics&quot;))
 Sys.sleep(5)
 search_field$sendKeysToElement(list(key = &quot;enter&quot;))</pre>
 
+</article></slide><slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>Pakcage <code>dplyr</code></h2></hgroup><article  id="pakcage-dplyr">
+
 </article></slide><slide class=""><hgroup><h2><code>dplyr</code></h2></hgroup><article  id="dplyr">
 
 <p>From <a href='https://dplyr.tidyverse.org/' title=''>official page</a></p>
@@ -3593,7 +3619,7 @@ search_field$sendKeysToElement(list(key = &quot;enter&quot;))</pre>
 <li><code>%&gt;%</code> chaining is particularly suitable for html/xml parsing:
 
 <ul>
-<li><code>html_document %&gt;% html_nodes() %&gt;% html_table()</code></li>
+<li><code>html_document %&gt;% html_nodes() %&gt;% html_text()</code></li>
 </ul></li>
 </ul>
 
@@ -3602,11 +3628,11 @@ search_field$sendKeysToElement(list(key = &quot;enter&quot;))</pre>
 <p>We will do:</p>
 
 <ul>
-<li>more xml parsing</li>
+<li>More xml parsing (newspaper RSS)</li>
 <li>Web-scraping using RSelenium</li>
 </ul>
 
-<p>Before the lab, please install Chrome/Firefox on your system.</p></article></slide>
+<p>Before the lab, please install Chrome/Firefox on your system and try the sample code in the slide.</p></article></slide>
 
 
   <slide class="backdrop"></slide>

@@ -1,7 +1,7 @@
 ---
 title: "Parsing Canadian Paliament List"
 author: "Akitaka Matsuo"
-date: "10/29/2018"
+date: "10/30/2018"
 output: html_document
 ---
 
@@ -17,6 +17,7 @@ https://www.ourcommons.ca/Parliamentarians/en/members/export?output=XML.
 ```{r}
 library(xml2)
 library(rvest)
+library(dplyr)
 ```
 
 ## Get the file
@@ -83,7 +84,7 @@ node_processing_2 <- function(x) {
 }
 
 ## use lapply() instead of for loop
-data_all_2 <- lapply(nodes, node_processing_2) %>% # first run lapply to the list of nodes
+data_all_2 <- lapply(mps_nodes, node_processing_2) %>% # first run lapply to the list of nodes
   bind_rows() # then use bind_rows() 
 head(data_all_2)
 ```
