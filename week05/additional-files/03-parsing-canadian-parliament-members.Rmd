@@ -32,7 +32,7 @@ str(xml_mps_can)
 
 
 ```{r}
-mps_nodes<- xml_nodes(xml_mps_can, "MemberOfParliament")
+mps_nodes<- xml_nodes(xml_mps_can, xpath = "//MemberOfParliament")
 length(mps_nodes)
 ```
 
@@ -44,7 +44,6 @@ as_list(mps_nodes[[1]])
 
 ```{r}
 unlist(as_list(mps_nodes[[1]]))
-
 ```
 
 ```{r}
@@ -52,19 +51,25 @@ as.list(unlist(as_list(mps_nodes[[1]])))
 ```
 
 ```{r}
-data.frame(as.list(unlist(as_list(mps_nodes[[1]]))), stringsAsFactors = FALSE)
+tmp <- data.frame(as.list(unlist(as_list(mps_nodes[[1]]))), stringsAsFactors = FALSE)
+View(tmp)
 ```
 
 In the code chunk above, we are finally able to make a list of mps
 ```{r}
 ## first define a function to process each member
-node_processing <- function(x) data.frame(as.list(unlist(as_list(x))), stringsAsFactors = FALSE)
+node_processing <- function(x) {
+  data.frame(as.list(unlist(as_list(x))), stringsAsFactors = FALSE)
+}
 
 data_list <- list()
 for(i in 1:length(mps_nodes)){
   nod <- mps_nodes[[i]]
   data_list[[i]] <- node_processing(nod)
 }
+
+## easier
+data_list <- lapply(mps_nodes, node_processing)
 
 data_all <- bind_rows(data_list) # rbind() does not work because some elements are missing for some members. 
 head(data_all)
