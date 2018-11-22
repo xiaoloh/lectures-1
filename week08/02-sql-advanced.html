@@ -493,7 +493,7 @@ dbGetQuery(db,
 ## 3  Republican                 288231    89389</code></pre>
 <pre class="r"><code># number of posts by day of the month
 dbGetQuery(db, 
-  &quot;SELECT SUBSTR(date, 9, 10) AS day_of_month, COUNT(*) as post_count
+  &quot;SELECT SUBSTR(date, 9, 2) AS day_of_month, COUNT(*) as post_count
   FROM posts
   GROUP BY day_of_month&quot;)</code></pre>
 <pre><code>##    day_of_month post_count

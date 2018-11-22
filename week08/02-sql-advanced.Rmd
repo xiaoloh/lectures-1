@@ -116,7 +116,7 @@ dbGetQuery(db,
 
 # number of posts by day of the month
 dbGetQuery(db, 
-  "SELECT SUBSTR(date, 9, 10) AS day_of_month, COUNT(*) as post_count
+  "SELECT SUBSTR(date, 9, 2) AS day_of_month, COUNT(*) as post_count
   FROM posts
   GROUP BY day_of_month")
 
