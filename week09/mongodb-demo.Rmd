@@ -69,7 +69,7 @@ for (f in fls){
   
   message(f)
   # read file into memory
-  fb <- read.csv(f, stringsAsFactors=F, encoding = "UTF-8")
+  fb <- fread(f, stringsAsFactors=F, encoding = "UTF-8")
   fb$screen_name <- as.character(fb$screen_name)
   fb$datetime <- readr::parse_datetime(fb$datetime)
   #fb <- read.csv(f, stringsAsFactors=F)

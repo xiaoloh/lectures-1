@@ -353,7 +353,7 @@ for (f in fls){
   
   message(f)
   # read file into memory
-  fb &lt;- read.csv(f, stringsAsFactors=F, encoding = &quot;UTF-8&quot;)
+  fb &lt;- fread(f, stringsAsFactors=F, encoding = &quot;UTF-8&quot;)
   fb$screen_name &lt;- as.character(fb$screen_name)
   fb$datetime &lt;- readr::parse_datetime(fb$datetime)
   #fb &lt;- read.csv(f, stringsAsFactors=F)
@@ -386,7 +386,7 @@ str(test)</code></pre>
 ##  $ from_name     : chr  &quot;Ted Poe&quot; &quot;Ted Poe&quot; &quot;Ted Poe&quot; &quot;Ted Poe&quot; ...
 ##  $ date          : chr  &quot;2017-01-03&quot; &quot;2017-01-03&quot; &quot;2017-01-05&quot; &quot;2017-01-05&quot; ...
 ##  $ datetime      : POSIXct, format: &quot;2017-01-03 17:16:40&quot; &quot;2017-01-03 23:11:15&quot; ...
-##  $ message       : chr  &quot;It’s great to be back in Washington for the start of the 115th Congress! Enjoyed seeing the Adams Family from K&quot;| __truncated__ &quot;For years, Washington bureaucrats have repeatedly preached that the border is secure. The reality is that the m&quot;| __truncated__ &quot;Today, I introduced H.R. 241, the Timely Repatriation Act of 2017, to restrict diplomatic visas to countries th&quot;| __truncated__ &quot;\&quot;Being sworn in is always an honor and a privilege, but this year is even more special for me. I am happy to a&quot;| __truncated__ ...
+##  $ message       : chr  &quot;It’s great to be back in Washington for the start of the 115th Congress! Enjoyed seeing the Adams Family from K&quot;| __truncated__ &quot;For years, Washington bureaucrats have repeatedly preached that the border is secure. The reality is that the m&quot;| __truncated__ &quot;Today, I introduced H.R. 241, the Timely Repatriation Act of 2017, to restrict diplomatic visas to countries th&quot;| __truncated__ &quot;\&quot;\&quot;Being sworn in is always an honor and a privilege, but this year is even more special for me. I am happy to&quot;| __truncated__ ...
 ##  $ i_type        : chr  &quot;link&quot; &quot;link&quot; &quot;photo&quot; &quot;link&quot; ...
 ##  $ link          : chr  &quot;https://www.c-span.org/video/?420804-1%2Fus-house-meets-elect-speaker-swear-members&amp;live&quot; &quot;http://poe.house.gov/2017/1/congressman-poe-introduces-the-smart-border-act&quot; &quot;https://www.facebook.com/JudgeTedPoe/photos/a.137207746325572.19816.106631626049851/1275444719168530/?type=3&quot; &quot;http://poe.house.gov/press-releases?ID=443ADE64-03E2-461A-BA56-FFB1489E9402&quot; ...
 ##  $ domain        : chr  &quot;c-span.org&quot; &quot;poe.house.gov&quot; NA &quot;poe.house.gov&quot; ...
@@ -405,16 +405,16 @@ db &lt;- dbConnect(RSQLite::SQLite(), &quot;~/Data/my472/facebook-db.sqlite&quot
 <pre class="r"><code># querying just one column
 dbMongo$find(&#39;{}&#39;, fields = &#39;{&quot;name&quot;: true}&#39;, limit = 10)</code></pre>
 <pre><code>##                         _id    name
-## 1  5bfab12bcd6cfba8ae108956 Ted Poe
-## 2  5bfab12bcd6cfba8ae108957 Ted Poe
-## 3  5bfab12bcd6cfba8ae108958 Ted Poe
-## 4  5bfab12bcd6cfba8ae108959 Ted Poe
-## 5  5bfab12bcd6cfba8ae10895a Ted Poe
-## 6  5bfab12bcd6cfba8ae10895b Ted Poe
-## 7  5bfab12bcd6cfba8ae10895c Ted Poe
-## 8  5bfab12bcd6cfba8ae10895d Ted Poe
-## 9  5bfab12bcd6cfba8ae10895e Ted Poe
-## 10 5bfab12bcd6cfba8ae10895f Ted Poe</code></pre>
+## 1  5bfcdbb4fd984449d7599452 Ted Poe
+## 2  5bfcdbb4fd984449d7599453 Ted Poe
+## 3  5bfcdbb4fd984449d7599454 Ted Poe
+## 4  5bfcdbb4fd984449d7599455 Ted Poe
+## 5  5bfcdbb4fd984449d7599456 Ted Poe
+## 6  5bfcdbb4fd984449d7599457 Ted Poe
+## 7  5bfcdbb4fd984449d7599458 Ted Poe
+## 8  5bfcdbb4fd984449d7599459 Ted Poe
+## 9  5bfcdbb4fd984449d759945a Ted Poe
+## 10 5bfcdbb4fd984449d759945b Ted Poe</code></pre>
 <pre class="r"><code>dbGetQuery(db, &quot;SELECT name FROM congress LIMIT 10&quot;)</code></pre>
 <pre><code>##                  name
 ## 1  Robert B. Aderholt
@@ -452,16 +452,16 @@ dbMongo$find(query = paste0(&#39;{&quot;datetime&quot;:{&quot;$gt&quot;: { &quot
         fields = &#39;{&quot;from_name&quot;: true, &quot;type&quot;: true, &quot;date&quot;: true}&#39;, 
         limit = 10)</code></pre>
 <pre><code>##                         _id type from_name       date
-## 1  5bfab12bcd6cfba8ae108956  rep   Ted Poe 2017-01-03
-## 2  5bfab12bcd6cfba8ae108957  rep   Ted Poe 2017-01-03
-## 3  5bfab12bcd6cfba8ae108958  rep   Ted Poe 2017-01-05
-## 4  5bfab12bcd6cfba8ae108959  rep   Ted Poe 2017-01-05
-## 5  5bfab12bcd6cfba8ae10895a  rep   Ted Poe 2017-01-06
-## 6  5bfab12bcd6cfba8ae10895b  rep   Ted Poe 2017-01-06
-## 7  5bfab12bcd6cfba8ae10895c  rep   Ted Poe 2017-01-09
-## 8  5bfab12bcd6cfba8ae10895d  rep   Ted Poe 2017-01-13
-## 9  5bfab12bcd6cfba8ae10895e  rep   Ted Poe 2017-01-18
-## 10 5bfab12bcd6cfba8ae10895f  rep   Ted Poe 2017-01-18</code></pre>
+## 1  5bfcdbb4fd984449d7599452  rep   Ted Poe 2017-01-03
+## 2  5bfcdbb4fd984449d7599453  rep   Ted Poe 2017-01-03
+## 3  5bfcdbb4fd984449d7599454  rep   Ted Poe 2017-01-05
+## 4  5bfcdbb4fd984449d7599455  rep   Ted Poe 2017-01-05
+## 5  5bfcdbb4fd984449d7599456  rep   Ted Poe 2017-01-06
+## 6  5bfcdbb4fd984449d7599457  rep   Ted Poe 2017-01-06
+## 7  5bfcdbb4fd984449d7599458  rep   Ted Poe 2017-01-09
+## 8  5bfcdbb4fd984449d7599459  rep   Ted Poe 2017-01-13
+## 9  5bfcdbb4fd984449d759945a  rep   Ted Poe 2017-01-18
+## 10 5bfcdbb4fd984449d759945b  rep   Ted Poe 2017-01-18</code></pre>
 <pre class="r"><code># AND operator
 dbGetQuery(db, &quot;SELECT from_name, type, date, likes_count 
            FROM posts
@@ -483,16 +483,16 @@ dbGetQuery(db, &quot;SELECT from_name, type, date, likes_count
         fields = &#39;{&quot;from_name&quot;: true, &quot;type&quot;: true, &quot;date&quot;: true, &quot;likes_count&quot;: true}&#39;, 
         limit = 10)</code></pre>
 <pre><code>##                         _id type                from_name       date
-## 1  5bfab12bcd6cfba8ae108959  rep                  Ted Poe 2017-01-05
-## 2  5bfab12bcd6cfba8ae108960  rep                  Ted Poe 2017-01-19
-## 3  5bfab12bcd6cfba8ae108a07  rep                  Ted Poe 2017-08-30
-## 4  5bfab12bcd6cfba8ae108a2e  rep                  Ted Poe 2017-09-18
-## 5  5bfab12bcd6cfba8ae108a6b  rep                  Ted Poe 2017-11-07
-## 6  5bfab12bcd6cfba8ae108be0  rep Congressman Hank Johnson 2017-01-15
-## 7  5bfab12bcd6cfba8ae108bec  rep Congressman Hank Johnson 2017-01-29
-## 8  5bfab12bcd6cfba8ae108ee6  rep       Rep. Steve Stivers 2017-08-15
-## 9  5bfab12bcd6cfba8ae108f46  rep               Sam Graves 2017-01-04
-## 10 5bfab12bcd6cfba8ae108f4f  rep               Sam Graves 2017-02-07
+## 1  5bfcdbb4fd984449d7599455  rep                  Ted Poe 2017-01-05
+## 2  5bfcdbb4fd984449d759945c  rep                  Ted Poe 2017-01-19
+## 3  5bfcdbb4fd984449d7599503  rep                  Ted Poe 2017-08-30
+## 4  5bfcdbb4fd984449d759952a  rep                  Ted Poe 2017-09-18
+## 5  5bfcdbb4fd984449d7599567  rep                  Ted Poe 2017-11-07
+## 6  5bfcdbb6fd984449d75996dc  rep Congressman Hank Johnson 2017-01-15
+## 7  5bfcdbb6fd984449d75996e8  rep Congressman Hank Johnson 2017-01-29
+## 8  5bfcdbb6fd984449d75999e2  rep       Rep. Steve Stivers 2017-08-15
+## 9  5bfcdbb6fd984449d7599a42  rep               Sam Graves 2017-01-04
+## 10 5bfcdbb6fd984449d7599a4b  rep               Sam Graves 2017-02-07
 ##    likes_count
 ## 1         1125
 ## 2          563
@@ -565,16 +565,16 @@ dbGetQuery(db, &quot;SELECT from_name, type, date, comments_count
         fields = &#39;{&quot;from_name&quot;: true, &quot;type&quot;: true, &quot;date&quot;: true, &quot;likes_count&quot;: true}&#39;, 
         limit = 10)</code></pre>
 <pre><code>##                         _id type from_name       date likes_count
-## 1  5bfab12bcd6cfba8ae108956  rep   Ted Poe 2017-01-03         121
-## 2  5bfab12bcd6cfba8ae108957  rep   Ted Poe 2017-01-03         182
-## 3  5bfab12bcd6cfba8ae108958  rep   Ted Poe 2017-01-05         137
-## 4  5bfab12bcd6cfba8ae108959  rep   Ted Poe 2017-01-05        1125
-## 5  5bfab12bcd6cfba8ae10895a  rep   Ted Poe 2017-01-06          24
-## 6  5bfab12bcd6cfba8ae10895b  rep   Ted Poe 2017-01-06          82
-## 7  5bfab12bcd6cfba8ae10895c  rep   Ted Poe 2017-01-09         231
-## 8  5bfab12bcd6cfba8ae10895d  rep   Ted Poe 2017-01-13          49
-## 9  5bfab12bcd6cfba8ae10895e  rep   Ted Poe 2017-01-18         106
-## 10 5bfab12bcd6cfba8ae10895f  rep   Ted Poe 2017-01-18          91</code></pre>
+## 1  5bfcdbb4fd984449d7599452  rep   Ted Poe 2017-01-03         121
+## 2  5bfcdbb4fd984449d7599453  rep   Ted Poe 2017-01-03         182
+## 3  5bfcdbb4fd984449d7599454  rep   Ted Poe 2017-01-05         137
+## 4  5bfcdbb4fd984449d7599455  rep   Ted Poe 2017-01-05        1125
+## 5  5bfcdbb4fd984449d7599456  rep   Ted Poe 2017-01-06          24
+## 6  5bfcdbb4fd984449d7599457  rep   Ted Poe 2017-01-06          82
+## 7  5bfcdbb4fd984449d7599458  rep   Ted Poe 2017-01-09         231
+## 8  5bfcdbb4fd984449d7599459  rep   Ted Poe 2017-01-13          49
+## 9  5bfcdbb4fd984449d759945a  rep   Ted Poe 2017-01-18         106
+## 10 5bfcdbb4fd984449d759945b  rep   Ted Poe 2017-01-18          91</code></pre>
 <pre class="r"><code>dbGetQuery(db, &quot;SELECT from_name, type, date, comments_count 
            FROM posts
            WHERE date LIKE &#39;2017-03%&#39;
@@ -594,16 +594,16 @@ dbGetQuery(db, &quot;SELECT from_name, type, date, comments_count
         fields = &#39;{&quot;from_name&quot;: true, &quot;type&quot;: true, &quot;date&quot;: true, &quot;likes_count&quot;: true}&#39;, 
         limit = 10)</code></pre>
 <pre><code>##                         _id type from_name       date likes_count
-## 1  5bfab12bcd6cfba8ae108956  rep   Ted Poe 2017-01-03         121
-## 2  5bfab12bcd6cfba8ae108957  rep   Ted Poe 2017-01-03         182
-## 3  5bfab12bcd6cfba8ae108958  rep   Ted Poe 2017-01-05         137
-## 4  5bfab12bcd6cfba8ae108959  rep   Ted Poe 2017-01-05        1125
-## 5  5bfab12bcd6cfba8ae10895a  rep   Ted Poe 2017-01-06          24
-## 6  5bfab12bcd6cfba8ae10895b  rep   Ted Poe 2017-01-06          82
-## 7  5bfab12bcd6cfba8ae10895c  rep   Ted Poe 2017-01-09         231
-## 8  5bfab12bcd6cfba8ae10895d  rep   Ted Poe 2017-01-13          49
-## 9  5bfab12bcd6cfba8ae10895e  rep   Ted Poe 2017-01-18         106
-## 10 5bfab12bcd6cfba8ae10895f  rep   Ted Poe 2017-01-18          91</code></pre>
+## 1  5bfcdbb4fd984449d7599452  rep   Ted Poe 2017-01-03         121
+## 2  5bfcdbb4fd984449d7599453  rep   Ted Poe 2017-01-03         182
+## 3  5bfcdbb4fd984449d7599454  rep   Ted Poe 2017-01-05         137
+## 4  5bfcdbb4fd984449d7599455  rep   Ted Poe 2017-01-05        1125
+## 5  5bfcdbb4fd984449d7599456  rep   Ted Poe 2017-01-06          24
+## 6  5bfcdbb4fd984449d7599457  rep   Ted Poe 2017-01-06          82
+## 7  5bfcdbb4fd984449d7599458  rep   Ted Poe 2017-01-09         231
+## 8  5bfcdbb4fd984449d7599459  rep   Ted Poe 2017-01-13          49
+## 9  5bfcdbb4fd984449d759945a  rep   Ted Poe 2017-01-18         106
+## 10 5bfcdbb4fd984449d759945b  rep   Ted Poe 2017-01-18          91</code></pre>
 <pre class="r"><code>dbGetQuery(db, &quot;SELECT from_name, message, date
            FROM posts
            WHERE message LIKE &#39;%london%&#39;
@@ -618,16 +618,16 @@ dbGetQuery(db, &quot;SELECT from_name, type, date, comments_count
         fields = &#39;{&quot;from_name&quot;: true, &quot;type&quot;: true, &quot;date&quot;: true, &quot;likes_count&quot;: true, &quot;message&quot;: true}&#39;, 
         limit = 10)</code></pre>
 <pre><code>##                         _id type                              from_name
-## 1  5bfab12bcd6cfba8ae108e77  rep                     Rep. Steve Stivers
-## 2  5bfab12bcd6cfba8ae108e96  rep                     Rep. Steve Stivers
-## 3  5bfab12bcd6cfba8ae108ede  rep                     Rep. Steve Stivers
-## 4  5bfab12bcd6cfba8ae108f16  rep                     Rep. Steve Stivers
-## 5  5bfab12bcd6cfba8ae108f43  rep                     Rep. Steve Stivers
-## 6  5bfab12bcd6cfba8ae10910f  rep U.S. Congressman Henry Cuellar (TX-28)
-## 7  5bfab12bcd6cfba8ae1096d1  rep             Congressman Joaquin Castro
-## 8  5bfab12bcd6cfba8ae109729  rep             Congressman Joaquin Castro
-## 9  5bfab12ccd6cfba8ae109eac  rep          Congressman Alcee L. Hastings
-## 10 5bfab12ccd6cfba8ae109ee1  rep          Congressman Alcee L. Hastings
+## 1  5bfcdbb6fd984449d7599973  rep                     Rep. Steve Stivers
+## 2  5bfcdbb6fd984449d7599992  rep                     Rep. Steve Stivers
+## 3  5bfcdbb6fd984449d75999da  rep                     Rep. Steve Stivers
+## 4  5bfcdbb6fd984449d7599a12  rep                     Rep. Steve Stivers
+## 5  5bfcdbb6fd984449d7599a3f  rep                     Rep. Steve Stivers
+## 6  5bfcdbb6fd984449d7599c0b  rep U.S. Congressman Henry Cuellar (TX-28)
+## 7  5bfcdbb7fd984449d759a1cd  rep             Congressman Joaquin Castro
+## 8  5bfcdbb7fd984449d759a225  rep             Congressman Joaquin Castro
+## 9  5bfcdbb7fd984449d759a9a8  rep          Congressman Alcee L. Hastings
+## 10 5bfcdbb7fd984449d759a9dd  rep          Congressman Alcee L. Hastings
 ##          date
 ## 1  2017-03-02
 ## 2  2017-04-28
@@ -661,7 +661,7 @@ dbGetQuery(db, &quot;SELECT from_name, type, date, comments_count
 ## 8          157
 ## 9           73
 ## 10          56</code></pre>
-<p>There is an equivalent of <strong>GROUP BY</strong> in SQL. It’s achieved by “aggregate” function.</p>
+<p>When some aggretation is involved (e.g. <code>COUNT</code> or <code>GROUP BY</code>), <code>*$aggregate()</code> is used. There is an equivalent of <strong>GROUP BY</strong> in SQL which is <code>$group</code>.</p>
 <pre class="r"><code>dbGetQuery(db, 
   &quot;SELECT from_name, COUNT(*) AS post_count
   FROM posts
@@ -772,7 +772,7 @@ dbGetQuery(db,
              sort = &#39;{&quot;likes_count&quot;: -1}&#39;,
              limit = 1)</code></pre>
 <pre><code>##                        _id                     from_name
-## 1 5bfab140cd6cfba8ae12d728 U.S. Senator Elizabeth Warren
+## 1 5bfcdbd5fd984449d75be224 U.S. Senator Elizabeth Warren
 ##              datetime
 ## 1 2017-01-29 01:59:12
 ##                                                                                                                                                                                                                                            message
@@ -813,11 +813,11 @@ dbGetQuery(db,
                   {&quot;$sort&quot;: {&quot;comment_like_ratio&quot;: -1}},
                   {&quot;$limit&quot;: 5}]&#39;) </code></pre>
 <pre><code>##                        _id                  from_name       date
-## 1 5bfab144cd6cfba8ae132aab U.S. Senator Susan Collins 2017-12-01
-## 2 5bfab143cd6cfba8ae1310c8       Senator Cory Gardner 2017-02-07
-## 3 5bfab143cd6cfba8ae1311a7       Senator Cory Gardner 2017-12-02
-## 4 5bfab140cd6cfba8ae12c8e6                John Cornyn 2017-02-06
-## 5 5bfab142cd6cfba8ae12f29e       Senator Richard Burr 2017-01-18
+## 1 5bfcdbd8fd984449d75c35a7 U.S. Senator Susan Collins 2017-12-01
+## 2 5bfcdbd7fd984449d75c1bc4       Senator Cory Gardner 2017-02-07
+## 3 5bfcdbd7fd984449d75c1ca3       Senator Cory Gardner 2017-12-02
+## 4 5bfcdbd4fd984449d75bd3e2                John Cornyn 2017-02-06
+## 5 5bfcdbd6fd984449d75bfd9a       Senator Richard Burr 2017-01-18
 ##                                                                                                                                                                                                                                                                                                                                                                                                                                message
 ## 1  After securing significant changes in the bill, as well as commitments to pass legislation to help lower health insurance premiums, I will cast my vote in support of the Senate tax reform bill. As revised, this bill will provide much-needed tax relief and simplification for lower- and middle-income families, while spurring the creation of good jobs and greater economic growth.  Click below to read my full statement:
 ## 2 The teachers in our lives play an outsized role as we grow into adults and throughout our adult life - and for good reason. They taught me that we must work together in common cause for a greater school, community, and nation. I look forward to the great work ahead of us not as parents divided, but as people committed, in spite of these differences, to building a stronger education for our children and grandchildren.
@@ -845,9 +845,9 @@ mongo = dbMongo$find(query = &#39;{&quot;type&quot;: {&quot;$ne&quot;: &quot;pho
         fields = &#39;{&quot;from_name&quot;: true, &quot;type&quot;: true, &quot;date&quot;: true, &quot;likes_count&quot;: true}&#39;, 
         limit = 10), times = 10)</code></pre>
 <pre><code>## Unit: microseconds
-##    expr      min       lq    mean   median       uq      max neval
-##  sqlite  744.828  941.048 1194.36 1143.235 1223.742 2282.499    10
-##   mongo 2795.447 2871.812 3162.41 3018.798 3249.795 3999.835    10</code></pre>
+##    expr      min       lq     mean   median       uq      max neval
+##  sqlite  724.676  913.457 1228.597 1120.501 1164.704 2316.818    10
+##   mongo 2627.387 2860.530 3084.240 3036.928 3155.682 3675.637    10</code></pre>
 <pre class="r"><code>microbenchmark(sqlite = 
 dbGetQuery(db,
   &quot;SELECT from_name, message, likes_count, comments_count, date,   
@@ -864,9 +864,9 @@ dbMongo$aggregate(&#39;[{ &quot;$match&quot; : {&quot;likes_count&quot;: {&quot;
                   {&quot;$limit&quot;: 5}]&#39;),
 times = 10)</code></pre>
 <pre><code>## Unit: milliseconds
-##    expr      min       lq     mean   median       uq      max neval
-##  sqlite 105.4969 108.6384 124.8601 124.8125 135.1712 150.8074    10
-##   mongo 176.8300 181.3084 218.9518 204.7816 248.7316 330.6006    10</code></pre>
+##    expr       min        lq     mean   median       uq      max neval
+##  sqlite  98.58012  99.49455 102.8267 101.0713 103.7414 111.3508    10
+##   mongo 163.33729 166.99337 177.3955 173.6789 187.5129 195.4824    10</code></pre>
 <p>We need more tuning for mongo (e.g. Add index, etc.), but not bad…</p>
 </div>
 
